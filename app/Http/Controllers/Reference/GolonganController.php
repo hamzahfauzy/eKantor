@@ -5,8 +5,14 @@ namespace App\Http\Controllers\Reference;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Model\Reference\Golongan;
+
 class GolonganController extends Controller
 {
+    public function __construct()
+    {
+        $this->model = new Golongan;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,6 +21,7 @@ class GolonganController extends Controller
     public function index()
     {
         //
+        return view('reference.golongan.index')->with('golongan',$this->model->orderby('nama')->get());
     }
 
     /**
@@ -25,6 +32,7 @@ class GolonganController extends Controller
     public function create()
     {
         //
+        return view('reference.golongan.create');
     }
 
     /**
@@ -36,6 +44,17 @@ class GolonganController extends Controller
     public function store(Request $request)
     {
         //
+        $this->validate($request,[
+            'nama' => 'required|unique:golongans',
+            'pangkat' => 'required'
+        ]);
+
+        $this->model->create([
+            'nama' => $request->nama,
+            'pangkat' => $request->pangkat
+        ]);
+
+        return redirect()->route('reference.golongan.index')->with(['success'=>'Data berhasil disimpan']);;
     }
 
     /**
@@ -55,9 +74,10 @@ class GolonganController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Golongan $golongan)
     {
         //
+        return view('reference.golongan.edit')->with('golongan',$golongan);
     }
 
     /**
@@ -67,9 +87,20 @@ class GolonganController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        $this->validate($request,[
+            'nama' => 'required|unique:golongans,nama,'.$request->id.',id,nama,'.$request->nama,
+            'pangkat' => 'required'
+        ]);
+
+        $this->model->find($request->id)->update([
+            'nama' => $request->nama,
+            'pangkat' => $request->pangkat
+        ]);
+
+        return redirect()->route('reference.golongan.index')->with(['success'=>'Data berhasil diupdate']);;
     }
 
     /**
@@ -78,8 +109,10 @@ class GolonganController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
+        $this->model->find($request->id)->delete();
+        return redirect()->route('reference.golongan.index')->with(['success'=>'Data berhasil dihapus']);;
     }
 }

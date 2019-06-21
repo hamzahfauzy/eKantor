@@ -27,75 +27,149 @@
             <div class="menu">
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li class="active">
+                    <li class="@yield('home-active')">
                         <a href="{{route('home')}}">
                             <i class="material-icons">home</i>
                             <span>Home</span>
                         </a>
                     </li>
-                    <li>
+                    @if(auth()->user()->level == 'admin')
+                    <li class="@yield('kepegawaian-active')">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">widgets</i>
                             <span>Kepegawaian</span>
                         </a>
                         <ul class="ml-menu">
-                            <li>
+                            <li class="@yield('golongan-active')">
                                 <a href="{{route('reference.golongan.index')}}">
-                                    <span>Golongan</span>
+                                    Golongan
                                 </a>
                             </li>
-                            <li>
+                            <li class="@yield('eselon-active')">
                                 <a href="{{route('reference.eselon.index')}}">
-                                    <span>Eselon</span>
+                                    Eselon
                                 </a>
                             </li>
-                            <li>
+                            <li class="@yield('pegawai-active')">
                                 <a href="{{route('reference.employee.index')}}">
-                                    <span>Pegawai</span>
+                                    Pegawai
                                 </a>
                             </li>
-                            <li>
+                            <li class="@yield('group-active')">
                                 <a href="{{route('reference.group.index')}}">
-                                    <span>Group</span>
+                                    Group
                                 </a>
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li class="@yield('pkr-active')">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">text_fields</i>
                             <span>Program, Kegiatan & Rekening</span>
                         </a>
                         <ul class="ml-menu">
-                            <li>
+                            <li class="@yield('program-active')">
                                 <a href="{{route('reference.program.index')}}">
-                                    <span>Program</span>
+                                    Program
                                 </a>
                             </li>
-                            <li>
+                            <li class="@yield('kegiatan-active')">
                                 <a href="{{route('reference.kegiatan.index')}}">
-                                    <span>Kegiatan</span>
+                                    Kegiatan
                                 </a>
                             </li>
-                            <li>
+                            <li class="@yield('rekening-active')">
                                 <a href="{{route('reference.rekening.index')}}">
-                                    <span>Rekening</span>
+                                    Rekening
                                 </a>
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <!-- <li class="@yield('user-active')">
                         <a href="{{route('users.index')}}">
                             <i class="material-icons">supervisor_account</i>
                             <span>Users</span>
                         </a>
-                    </li>
-                    <li>
+                    </li> -->
+                    <li class="@yield('setting-active')">
                         <a href="{{route('setting.index')}}">
                             <i class="material-icons">build</i>
                             <span>Setting</span>
                         </a>
                     </li>
+                    @else
+                        @if(auth()->user()->employee->inSpecialRole() && !auth()->user()->employee->isPimpinan())
+                        <li class="@yield('surat-active')">
+                            <a href="javascript:void(0);" class="menu-toggle">
+                                <i class="material-icons">email</i>
+                                <span>Surat</span>
+                            </a>
+                            <ul class="ml-menu">
+                                <li class="@yield('surat-masuk-active')">
+                                    <a href="{{route('pegawai.surat-masuk.index')}}">
+                                        Surat Masuk
+                                    </a>
+                                </li>
+                                <li class="@yield('surat-keluar-active')">
+                                    <a href="{{route('pegawai.surat-keluar.index')}}">
+                                        Surat Keluar
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @elseif(auth()->user()->employee->isPimpinan())
+                        <li class="@yield('surat-active')">
+                            <a href="javascript:void(0);" class="menu-toggle">
+                                <i class="material-icons">email</i>
+                                <span>Surat</span>
+                            </a>
+                            <ul class="ml-menu">
+                                <li class="@yield('surat-masuk-active')">
+                                    <a href="{{route('pimpinan.surat.index')}}">
+                                        Surat Masuk
+                                    </a>
+                                </li>
+                                <li class="@yield('disposisi-active')">
+                                    <a href="{{route('pimpinan.surat.disposisi')}}">
+                                        Disposisi
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @endif
+                        <li class="@yield('spt-sppd-active')">
+                            <a href="javascript:void(0);" class="menu-toggle">
+                                <i class="material-icons">dvr</i>
+                                <span>SPT & SPPD</span>
+                            </a>
+                            <ul class="ml-menu">
+                                <li class="@yield('surat-masuk-active')">
+                                    <a href="#">
+                                        SPT
+                                    </a>
+                                </li>
+                                <li class="@yield('surat-keluar-active')">
+                                    <a href="#">
+                                        SPPD
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @if(!auth()->user()->employee->isPimpinan())
+                        <li class="@yield('disposisi-active')">
+                            <a href="{{route('disposisi')}}">
+                                <i class="material-icons">accessibility</i>
+                                <span>Disposisi</span>
+                            </a>
+                        </li>
+                        @endif
+                        <li class="@yield('agenda-active')">
+                            <a href="#">
+                                <i class="material-icons">view_agenda</i>
+                                <span>Agenda</span>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
             <!-- #Menu -->

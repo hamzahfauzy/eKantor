@@ -21,14 +21,34 @@
     <!-- Animation Css -->
     <link href="{{asset('template/bsbm/plugins/animate-css/animate.css')}}" rel="stylesheet" />
 
+    <link href="{{asset('template/bsbm/plugins/dropzone/dropzone.css')}}" rel="stylesheet">
+
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link href="{{asset('template/bsbm/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}" rel="stylesheet" />
+
     <!-- Morris Chart Css-->
     <link href="{{asset('template/bsbm/plugins/morrisjs/morris.css')}}" rel="stylesheet" />
+
+    <!-- Sweet Alert Css -->
+    <link href="{{asset('template/bsbm/plugins/sweetalert/sweetalert.css')}}" rel="stylesheet" />
+
+    <!-- JQuery DataTable Css -->
+    <link href="{{asset('template/bsbm/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css')}}" rel="stylesheet">
 
     <!-- Custom Css -->
     <link href="{{asset('template/bsbm/css/style.css')}}" rel="stylesheet">
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="{{asset('template/bsbm/css/themes/all-themes.css')}}" rel="stylesheet" />
+
+    <style type="text/css">
+    .invalid-feedback {
+        color: red;
+    }
+    .dropdown-menu ul.menu li {
+        list-style-type: none;
+    }
+    </style>
 </head>
 
 <body class="theme-red">
@@ -82,41 +102,20 @@
     <!-- Bootstrap Core Js -->
     <script src="{{asset('template/bsbm/plugins/bootstrap/js/bootstrap.js')}}"></script>
 
+    <!-- Bootstrap Select Css -->
+    <link href="{{asset('template/bsbm/plugins/bootstrap-select/css/bootstrap-select.css')}}" rel="stylesheet" />
+
     <!-- Waves Effect Plugin Js -->
     <script src="{{asset('template/bsbm/plugins/node-waves/waves.js')}}"></script>
 
-    <!-- Validation Plugin Js -->
+    <!-- Jquery Validation Plugin Css -->
     <script src="{{asset('template/bsbm/plugins/jquery-validation/jquery.validate.js')}}"></script>
-
-    <!-- Slimscroll Plugin Js -->
-    <script src="{{asset('template/bsbm/plugins/jquery-slimscroll/jquery.slimscroll.js')}}"></script>
-
-    <!-- Jquery CountTo Plugin Js -->
-    <script src="{{asset('template/bsbm/plugins/jquery-countto/jquery.countTo.js')}}"></script>
-
-    <!-- Morris Plugin Js -->
-    <script src="{{asset('template/bsbm/plugins/raphael/raphael.min.js')}}"></script>
-    <script src="{{asset('template/bsbm/plugins/morrisjs/morris.js')}}"></script>
-
-    <!-- ChartJs -->
-    <script src="{{asset('template/bsbm/plugins/chartjs/Chart.bundle.js')}}"></script>
-
-    <!-- Flot Charts Plugin Js -->
-    <script src="{{asset('template/bsbm/plugins/flot-charts/jquery.flot.js')}}"></script>
-    <script src="{{asset('template/bsbm/plugins/flot-charts/jquery.flot.resize.js')}}"></script>
-    <script src="{{asset('template/bsbm/plugins/flot-charts/jquery.flot.pie.js')}}"></script>
-    <script src="{{asset('template/bsbm/plugins/flot-charts/jquery.flot.categories.js')}}"></script>
-    <script src="{{asset('template/bsbm/plugins/flot-charts/jquery.flot.time.js')}}"></script>
-
-    <!-- Sparkline Chart Plugin Js -->
-    <script src="{{asset('template/bsbm/plugins/jquery-sparkline/jquery.sparkline.js')}}"></script>
 
     <!-- Custom Js -->
     <script src="{{asset('template/bsbm/js/admin.js')}}"></script>
-    <script src="{{asset('template/bsbm/js/pages/index.js')}}"></script>
+    <script src="{{asset('template/bsbm/js/pages/forms/form-validation.js')}}"></script>
 
-    <!-- Demo Js -->
-    <script src="{{asset('template/bsbm/js/demo.js')}}"></script>
+    @yield('script')
 </body>
 
 </html>

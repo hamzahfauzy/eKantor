@@ -23,6 +23,11 @@
 
     <!-- Custom Css -->
     <link href="{{asset('template/bsbm/css/style.css')}}" rel="stylesheet">
+    <style type="text/css">
+    .invalid-feedback {
+        color: red;
+    }
+    </style>
 </head>
 
 <body class="login-page">

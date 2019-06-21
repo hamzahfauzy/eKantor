@@ -5,8 +5,16 @@ namespace App\Http\Controllers\Reference;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Model\Reference\{Group, SubGroup, Employee};
+
 class SubGroupController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->model = new SubGroup;
+        $this->employee = Employee::get();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -22,9 +30,13 @@ class SubGroupController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Group $group)
     {
         //
+        return view('reference.group.sub-group.create',[
+            'group' => $group,
+            'employees' => $this->employee,
+        ]);
     }
 
     /**
@@ -36,6 +48,19 @@ class SubGroupController extends Controller
     public function store(Request $request)
     {
         //
+        $this->validate($request,[
+            'nama' => 'required|unique:sub_groups',
+            'kepala_id' => 'required',
+            'group_id' => 'required',
+        ]);
+
+        $this->model->create([
+            'nama' => $request->nama,
+            'kepala_id' => $request->kepala_id,
+            'group_id' => $request->group_id
+        ]);
+
+        return redirect()->route('reference.group.show',$request->group_id)->with(['success'=>'Data berhasil disimpan']);
     }
 
     /**
@@ -44,9 +69,13 @@ class SubGroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Group $group, SubGroup $sub)
     {
         //
+        return view('reference.group.sub-group.show',[
+            'group' => $group,
+            'sub' => $sub
+        ]); 
     }
 
     /**
@@ -55,9 +84,14 @@ class SubGroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Group $group, SubGroup $sub)
     {
         //
+        return view('reference.group.sub-group.edit',[
+            'group' => $group,
+            'employees' => $this->employee,
+            'model' => $sub,
+        ]);
     }
 
     /**
@@ -67,9 +101,22 @@ class SubGroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        $this->validate($request,[
+            'nama' => 'required|unique:sub_groups,nama,'.$request->id.',id,nama,'.$request->nama,
+            'kepala_id' => 'required',
+            'group_id' => 'required',
+        ]);
+
+        $this->model->find($request->id)->update([
+            'nama' => $request->nama,
+            'kepala_id' => $request->kepala_id,
+            'group_id' => $request->group_id
+        ]);
+
+        return redirect()->route('reference.group.show',$request->group_id)->with(['success'=>'Data berhasil diupdate']);;
     }
 
     /**
@@ -78,8 +125,10 @@ class SubGroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Group $group)
     {
         //
+        $this->model->find($request->id)->delete();
+        return redirect()->route('reference.group.show',$group->id)->with(['success'=>'Data berhasil dihapus']);;
     }
 }

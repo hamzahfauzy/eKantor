@@ -5,8 +5,14 @@ namespace App\Http\Controllers\Reference;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Model\Reference\Eselon;
+
 class EselonController extends Controller
 {
+    public function __construct()
+    {
+        $this->model = new Eselon;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,6 +21,7 @@ class EselonController extends Controller
     public function index()
     {
         //
+        return view('reference.eselon.index')->with('eselon',$this->model->orderby('nama')->get());
     }
 
     /**
@@ -25,6 +32,7 @@ class EselonController extends Controller
     public function create()
     {
         //
+        return view('reference.eselon.create');
     }
 
     /**
@@ -36,6 +44,15 @@ class EselonController extends Controller
     public function store(Request $request)
     {
         //
+        $this->validate($request,[
+            'nama' => 'required|unique:eselons',
+        ]);
+
+        $this->model->create([
+            'nama' => $request->nama,
+        ]);
+
+        return redirect()->route('reference.eselon.index')->with(['success'=>'Data berhasil disimpan']);;
     }
 
     /**
@@ -55,9 +72,10 @@ class EselonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Eselon $eselon)
     {
         //
+        return view('reference.eselon.edit')->with('eselon',$eselon);
     }
 
     /**
@@ -67,9 +85,18 @@ class EselonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        $this->validate($request,[
+            'nama' => 'required|unique:eselons,nama,'.$request->id.',id,nama,'.$request->nama,
+        ]);
+
+        $this->model->find($request->id)->update([
+            'nama' => $request->nama,
+        ]);
+
+        return redirect()->route('reference.eselon.index')->with(['success'=>'Data berhasil diupdate']);;
     }
 
     /**
@@ -78,8 +105,10 @@ class EselonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
+        $this->model->find($request->id)->delete();
+        return redirect()->route('reference.eselon.index')->with(['success'=>'Data berhasil dihapus']);;
     }
 }

@@ -5,8 +5,15 @@ namespace App\Http\Controllers\Reference;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Model\Reference\{Group, SubGroup, SubGroupStaff, Employee};
+
 class SubGroupStaffController extends Controller
 {
+    function __construct()
+    {
+        $this->model = new SubGroupStaff;
+        $this->employees = Employee::get();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -22,9 +29,14 @@ class SubGroupStaffController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Group $group, SubGroup $sub)
     {
         //
+        return view('reference.group.sub-group.sub-group-staff.create',[
+            'group' => $group,
+            'employees' => $this->employees,
+            'sub' => $sub,
+        ]);
     }
 
     /**
@@ -33,9 +45,19 @@ class SubGroupStaffController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Group $group, SubGroup $sub)
     {
         //
+        $this->validate($request,[
+            'pegawai_id' => 'required|unique:sub_group_staffs'
+        ]);
+
+        $this->model->create([
+            'sub_group_id' => $sub->id,
+            'pegawai_id' => $request->pegawai_id,
+        ]);
+
+        return redirect()->route('reference.group.sub.show',[$group->id,$sub->id])->with(['success'=>'Data berhasil disimpan']);
     }
 
     /**
@@ -78,8 +100,10 @@ class SubGroupStaffController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Group $group, SubGroup $sub)
     {
         //
+        $this->model->find($request->id)->delete();
+        return redirect()->route('reference.group.sub.show',[$group->id,$sub->id])->with(['success'=>'Data berhasil dihapus']);
     }
 }

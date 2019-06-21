@@ -5,8 +5,15 @@ namespace App\Http\Controllers\Reference;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Model\Reference\{Group,Employee};
+
 class GroupController extends Controller
 {
+    public function __construct()
+    {
+        $this->model = new Group;
+        $this->employee = Employee::get();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,6 +22,7 @@ class GroupController extends Controller
     public function index()
     {
         //
+        return view('reference.group.index')->with('group',$this->model->orderby('nama')->get());
     }
 
     /**
@@ -25,6 +33,9 @@ class GroupController extends Controller
     public function create()
     {
         //
+        return view('reference.group.create',[
+            'employees' => $this->employee
+        ]);
     }
 
     /**
@@ -36,6 +47,17 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         //
+        $this->validate($request,[
+            'nama' => 'required|unique:groups',
+            'kepala_id' => 'required'
+        ]);
+
+        $this->model->create([
+            'nama' => $request->nama,
+            'kepala_id' => $request->kepala_id
+        ]);
+
+        return redirect()->route('reference.group.index')->with(['success'=>'Data berhasil disimpan']);
     }
 
     /**
@@ -44,9 +66,10 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Group $group)
     {
         //
+        return view('reference.group.show')->with('group',$group); 
     }
 
     /**
@@ -55,9 +78,13 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Group $group)
     {
         //
+        return view('reference.group.edit',[
+            'employees' => $this->employee,
+            'model' => $group
+        ]);
     }
 
     /**
@@ -67,9 +94,20 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        $this->validate($request,[
+            'nama' => 'required|unique:groups,nama,'.$request->id.',id,nama,'.$request->nama,
+            'kepala_id' => 'required'
+        ]);
+
+        $this->model->find($request->id)->update([
+            'nama' => $request->nama,
+            'kepala_id' => $request->kepala_id
+        ]);
+
+        return redirect()->route('reference.group.index')->with(['success'=>'Data berhasil diupdate']);;
     }
 
     /**
@@ -78,8 +116,10 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
+        $this->model->find($request->id)->delete();
+        return redirect()->route('reference.group.index')->with(['success'=>'Data berhasil dihapus']);;
     }
 }
